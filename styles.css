@@ -1,0 +1,81 @@
+/* Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Container */
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Key Box */
+  .key-box {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .key-box h1 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+  }
+  
+  .key-box p {
+    margin: 10px 0;
+    font-size: 1rem;
+  }
+  
+  /* Button */
+  button {
+    background: #4caf50;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background: #45a049;
+  }
+  
+  /* Input Field */
+  input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    outline: none;
+  }
+  
+  /* Key Display */
+  .key-display {
+    font-weight: bold;
+    color: #ff9800;
+    margin-top: 15px;
+  }
+  
