@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitelist Key</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0e0e11;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #141418;
+            border-radius: 10px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #a5a5a5;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .key-box {
+            background-color: #0e0e11;
+            border: 1px solid #3a3a3e;
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 16px;
+            word-break: break-all;
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #000000;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .timer {
+            color: #ff6f61;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .footer-links a {
+            color: #a5a5a5;
+            text-decoration: none;
+            font-size: 12px;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Successfully Whitelisted!</h2>
+        <p>Please return to the service for access. Your key expires in:</p>
+        <div class="timer" id="timer">Loading...</div>
+        <div class="key-box" id="key-box">Loading key...</div>
+        <button onclick="copyToClipboard()">Copy</button>
+        <div class="footer-links">
+            <a href="#">Report</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "http://thor.pylex.software:10663/generate?id=082";  // URL API untuk generate key
+
+        async function fetchKey() {
+            try {
+                console.log("Fetching key from API...");
+
+                // Memanggil API tanpa menggunakan API key atau header tambahan
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch key. Status: " + response.status);
+                }
+
+                const data = await response.json();
+                console.log("API Response:", data);
+
+                if (data && data.key) {
+                    document.getElementById("key-box").innerText = data.key;  // Menampilkan key di halaman
+                    startCountdown(data.remaining_time);  // Memulai timer
+                } else {
+                    throw new Error("Key not found in API response.");
+                }
+            } catch (error) {
+                console.error("Error fetching key:", error);
+                document.getElementById("key-box").innerText = "Failed to load key.";  // Pesan jika gagal
+            }
+        }
+
+        function startCountdown(remainingTime) {
+            const timerElement = document.getElementById("timer");
+            const [hours, minutes, seconds] = remainingTime.split(":").map(Number);
+            let timeLeft = hours * 3600 + minutes * 60 + seconds;
+
+            function updateTimer() {
+                if (timeLeft <= 0) {
+                    timerElement.innerText = "Key expired!";
+                    return;
+                }
+
+                const h = Math.floor(timeLeft / 3600);
+                const m = Math.floor((timeLeft % 3600) / 60);
+                const s = timeLeft % 60;
+
+                timerElement.innerText = `${h}h ${m}m ${s}s`;
+                timeLeft -= 1;
+
+                setTimeout(updateTimer, 1000);
+            }
+
+            updateTimer();
+        }
+
+        function copyToClipboard() {
+            const key = document.getElementById("key-box").innerText;
+            navigator.clipboard.writeText(key).then(() => {
+                alert("Key copied to clipboard!");  // Jika berhasil menyalin
+            }).catch(() => {
+                alert("Failed to copy key. Please try manually.");  // Jika gagal menyalin
+            });
+        }
+
+        // Panggil fungsi fetch saat halaman dimuat
+        window.onload = function() {
+            if (sessionStorage.getItem("verificationStarted") !== "true") {
+                alert("You must start the verification process first!");
+                window.location.href = "start.html";  // Ganti dengan halaman start
+            } else {
+                fetchKey();  // Memanggil fungsi fetchKey jika verifikasi telah selesai
+            }
+        }
+    </script>
+</body>
+</html>
